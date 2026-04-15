@@ -1,0 +1,8 @@
+C:\Projects\janitor\janitor-core\src\main\java\io\terapeak\janitor\annotation\Cleanup.java
+C:\Projects\janitor\janitor-core\src\main\java\io\terapeak\janitor\annotation\Cleanups.java
+C:\Projects\janitor\janitor-core\src\main\java\io\terapeak\janitor\config\CleanupConfig.java
+C:\Projects\janitor\janitor-core\src\main\java\io\terapeak\janitor\executor\CleanupExecutionException.java
+C:\Projects\janitor\janitor-core\src\main\java\io\terapeak\janitor\executor\CleanupExecutor.java
+C:\Projects\janitor\janitor-core\src\main\java\io\terapeak\janitor\processor\CleanupIndexProcessor.java
+C:\Projects\janitor\janitor-core\src\main\java\io\terapeak\janitor\registry\CleanupRegistry.java
+C:\Projects\janitor\janitor-core\src\main\java\io\terapeak\janitor\spi\SoftDeletable.java

@@ -1,0 +1,26 @@
+{
+  "groups": [
+    {
+      "name": "cleanup",
+      "type": "io.terapeak.janitor.spring.properties.CleanupProperties",
+      "sourceType": "io.terapeak.janitor.spring.properties.CleanupProperties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "cleanup.default-batch-size",
+      "type": "java.lang.Integer",
+      "description": "Override the default batch size for all jobs that have {@code batchSize=0}. A value of {@code 0} means no override is applied.",
+      "sourceType": "io.terapeak.janitor.spring.properties.CleanupProperties",
+      "defaultValue": 0
+    },
+    {
+      "name": "cleanup.enabled",
+      "type": "java.lang.Boolean",
+      "description": "Master switch. When {@code false}, no cleanup jobs are registered, regardless of individual job configuration.",
+      "sourceType": "io.terapeak.janitor.spring.properties.CleanupProperties",
+      "defaultValue": true
+    }
+  ],
+  "hints": []
+}

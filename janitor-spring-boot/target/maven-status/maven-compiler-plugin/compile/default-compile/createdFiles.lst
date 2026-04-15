@@ -1,0 +1,4 @@
+io\terapeak\janitor\spring\auto\CleanupAutoConfiguration.class
+io\terapeak\janitor\spring\scheduler\CleanupScheduler.class
+io\terapeak\janitor\spring\properties\CleanupProperties.class
+META-INF\spring-configuration-metadata.json

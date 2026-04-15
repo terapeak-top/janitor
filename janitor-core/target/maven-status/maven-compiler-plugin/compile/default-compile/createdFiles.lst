@@ -1,0 +1,10 @@
+io\terapeak\janitor\executor\CleanupExecutor.class
+io\terapeak\janitor\executor\CleanupExecutionException.class
+io\terapeak\janitor\spi\SoftDeletable.class
+io\terapeak\janitor\registry\CleanupRegistry.class
+io\terapeak\janitor\config\CleanupConfig$Builder.class
+io\terapeak\janitor\annotation\Cleanups.class
+io\terapeak\janitor\config\CleanupConfig.class
+io\terapeak\janitor\annotation\Cleanup.class
+io\terapeak\janitor\processor\CleanupIndexProcessor.class
+META-INF\services\javax.annotation.processing.Processor
