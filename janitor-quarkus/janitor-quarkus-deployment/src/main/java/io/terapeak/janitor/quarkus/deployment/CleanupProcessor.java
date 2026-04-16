@@ -35,7 +35,7 @@ public class CleanupProcessor {
 
     private static final String FEATURE_NAME = "janitor";
 
-    private static final DotName CLEANUP_NAME  = DotName.createSimple(Cleanup.class.getName());
+    private static final DotName CLEANUP_NAME = DotName.createSimple(Cleanup.class.getName());
     private static final DotName CLEANUPS_NAME = DotName.createSimple(Cleanups.class.getName());
 
     // -------------------------------------------------------------------------
@@ -54,11 +54,11 @@ public class CleanupProcessor {
     @BuildStep
     AdditionalBeanBuildItem registerRuntimeBeans() {
         return AdditionalBeanBuildItem.builder()
-                .setUnremovable()
-                .addBeanClasses(
-                        CleanupJobRunner.class,
-                        CleanupBootstrap.class)
-                .build();
+            .setUnremovable()
+            .addBeanClasses(
+                CleanupJobRunner.class,
+                CleanupBootstrap.class)
+            .build();
     }
 
     // -------------------------------------------------------------------------
@@ -71,19 +71,19 @@ public class CleanupProcessor {
 
         // Classes annotated with @Cleanup (single)
         Collection<AnnotationInstance> singleAnnotations =
-                indexBuildItem.getIndex().getAnnotations(CLEANUP_NAME);
+            indexBuildItem.getIndex().getAnnotations(CLEANUP_NAME);
 
         // Classes annotated with @Cleanups (repeatable container)
         Collection<AnnotationInstance> containerAnnotations =
-                indexBuildItem.getIndex().getAnnotations(CLEANUPS_NAME);
+            indexBuildItem.getIndex().getAnnotations(CLEANUPS_NAME);
 
         List<String> annotatedClassNames = new ArrayList<>();
         singleAnnotations.stream()
-                .map(ai -> ai.target().asClass().name().toString())
-                .forEach(annotatedClassNames::add);
+            .map(ai -> ai.target().asClass().name().toString())
+            .forEach(annotatedClassNames::add);
         containerAnnotations.stream()
-                .map(ai -> ai.target().asClass().name().toString())
-                .forEach(annotatedClassNames::add);
+            .map(ai -> ai.target().asClass().name().toString())
+            .forEach(annotatedClassNames::add);
 
         if (annotatedClassNames.isEmpty()) {
             log.warn("[Cleanup/Quarkus] No classes annotated with @Cleanup found in Jandex index.");
@@ -92,21 +92,21 @@ public class CleanupProcessor {
         for (String className : annotatedClassNames) {
             // Register the config class itself (needs reflection to read annotations)
             items.add(ReflectiveClassBuildItem.builder(className)
-                    .methods(true)
-                    .fields(true)
-                    .build());
+                .methods(true)
+                .fields(true)
+                .build());
 
             log.debug("[Cleanup/Quarkus] Registered '{}' for reflection.", className);
         }
 
         // Always register the core library classes for native image
         items.add(ReflectiveClassBuildItem.builder(
-                        io.terapeak.janitor.config.CleanupConfig.class,
-                        io.terapeak.janitor.executor.CleanupExecutor.class,
-                        io.terapeak.janitor.registry.CleanupRegistry.class)
-                .methods(true)
-                .fields(true)
-                .build());
+                io.terapeak.janitor.config.CleanupConfig.class,
+                io.terapeak.janitor.executor.CleanupExecutor.class,
+                io.terapeak.janitor.registry.CleanupRegistry.class)
+            .methods(true)
+            .fields(true)
+            .build());
 
         return items;
     }
