@@ -63,7 +63,6 @@ package com.example.config;
 import io.terapeak.cleanup.annotation.Cleanup;
 
 @Cleanup(
-    entity        = AuditLog.class,
     field         = "createdAt",       // java.time.LocalDateTime field on the entity
     retentionDays = 90,                // delete rows older than 90 days
     cron          = "0 0 2 * * ?",     // 2 AM every day (Quartz format)
@@ -72,7 +71,6 @@ import io.terapeak.cleanup.annotation.Cleanup;
     skipSoftDeleted = true
 )
 @Cleanup(
-    entity        = UserSession.class,
     field         = "lastActiveAt",
     retentionDays = 30,
     softDelete    = true               // sets deleted=true instead of hard DELETE
@@ -89,7 +87,6 @@ No runtime classpath scanning is needed.
 
 | Attribute | Type | Default | Description |
 |---|---|---|---|
-| `entity` | `Class<?>` | — | **Required.** The JPA entity class to clean. |
 | `field` | `String` | — | **Required.** Date/time field name used to compute row age. |
 | `retentionDays` | `int` | — | **Required.** Rows older than this many days are processed. |
 | `cron` | `String` | `"0 0 2 * * ?"` | Quartz cron expression (6-part: s m h d M dow). |
@@ -134,22 +131,10 @@ Override any default via `application.properties` / `application.yml`:
 
 ```properties
 # Disable ALL cleanup jobs (master switch)
-cleanup.enabled=true
+janitor.enabled=true
 
 # Override the default batch size for all jobs that have batchSize=0
-cleanup.default-batch-size=1000
-```
-
-To provide a custom `TaskScheduler`:
-```java
-@Bean
-public TaskScheduler cleanupTaskScheduler() {
-    ThreadPoolTaskScheduler s = new ThreadPoolTaskScheduler();
-    s.setPoolSize(4);
-    s.setThreadNamePrefix("my-cleanup-");
-    s.initialize();
-    return s;
-}
+janitor.default-batch-size=1000
 ```
 
 All beans are `@ConditionalOnMissingBean`, so any bean you declare replaces the default.

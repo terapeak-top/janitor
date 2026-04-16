@@ -8,12 +8,12 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  *
  * <pre>{@code
  * # application.properties
- * cleanup.enabled=true
- * cleanup.default-batch-size=500
+ * janitor.enabled=true
+ * janitor.default-batch-size=500
  * }</pre>
  */
-@ConfigurationProperties(prefix = "cleanup")
-public class CleanupProperties {
+@ConfigurationProperties(prefix = "janitor")
+public class JanitorProperties {
 
     /**
      * Master switch. When {@code false}, no cleanup jobs are registered,

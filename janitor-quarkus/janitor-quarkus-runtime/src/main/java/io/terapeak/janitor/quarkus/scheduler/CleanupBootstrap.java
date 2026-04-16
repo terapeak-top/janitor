@@ -11,8 +11,6 @@ import io.terapeak.janitor.config.CleanupConfig;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.event.Observes;
 import jakarta.inject.Inject;
-import java.time.Duration;
-import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.concurrent.ScheduledExecutorService;
@@ -44,11 +42,8 @@ public class CleanupBootstrap {
     CleanupJobRunner runner;
 
     void onStart(@Observes StartupEvent event) {
-        CronParser cronParser = new CronParser(
-            CronDefinitionBuilder.instanceDefinitionFor(CronType.QUARTZ)
-        );
+
         List<CleanupConfig> configs = runner.getEnabledConfigs();
-        //log.info("[Cleanup/Quarkus] Is scheduler running " + scheduler.isStarted());
 
         if (configs.isEmpty()) {
             log.info("[Cleanup/Quarkus] No enabled cleanup jobs to register.");

@@ -18,7 +18,6 @@ import java.lang.annotation.Target;
  *
  * <pre>{@code
  * @Cleanup(
- *     entity       = Order.class,
  *     field        = "createdAt",
  *     retentionDays = 90,
  *     cron         = "0 0 3 * * ?",
@@ -33,11 +32,6 @@ import java.lang.annotation.Target;
 @Documented
 @Repeatable(Cleanups.class)
 public @interface Cleanup {
-
-    /**
-     * The JPA entity class whose table will be cleaned up.
-     */
-    Class<?> entity();
 
     /**
      * Name of the date/time field on the entity used to evaluate row age.
@@ -78,8 +72,8 @@ public @interface Cleanup {
     boolean softDelete() default false;
 
     /**
-     * When {@code true} (default), rows that have already been soft-deleted are excluded
+     * When {@code true}, rows that have already been soft-deleted are excluded
      * from hard-delete jobs. Ignored when {@code softDelete = true}.
      */
-    boolean skipSoftDeleted() default true;
+    boolean skipSoftDeleted() default false;
 }

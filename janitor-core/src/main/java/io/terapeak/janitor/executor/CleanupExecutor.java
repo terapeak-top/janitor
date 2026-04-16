@@ -2,20 +2,18 @@ package io.terapeak.janitor.executor;
 
 import io.terapeak.janitor.config.CleanupConfig;
 import io.terapeak.janitor.spi.SoftDeletable;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 import java.time.LocalDateTime;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Framework-agnostic executor that carries out a single cleanup job.
  *
  * <p>Framework adapters (Spring, Quarkus, KumuluzEE) obtain an {@link EntityManager}
- * from their own context and call {@link #execute(CleanupConfig, EntityManager)}.
- * The executor itself is stateless and thread-safe.
+ * from their own context and call {@link #execute(CleanupConfig, EntityManager)}. The executor itself is stateless and thread-safe.
  */
 public class CleanupExecutor {
 
@@ -24,7 +22,9 @@ public class CleanupExecutor {
     // Shared singleton - frameworks may also instantiate their own
     private static final CleanupExecutor INSTANCE = new CleanupExecutor();
 
-    public static CleanupExecutor getInstance() { return INSTANCE; }
+    public static CleanupExecutor getInstance() {
+        return INSTANCE;
+    }
 
     /**
      * Execute the cleanup defined by {@code config} using the supplied {@code em}.
@@ -33,8 +33,7 @@ public class CleanupExecutor {
      * executed inside a separate transaction if {@code batchSize > 0}.
      *
      * @param config fully resolved cleanup configuration
-     * @param em     active {@link EntityManager}; must be in an open transaction
-     *               when {@code batchSize == 0}
+     * @param em     active {@link EntityManager}; must be in an open transaction when {@code batchSize == 0}
      */
     public void execute(CleanupConfig config, EntityManager em) {
         if (!config.isEnabled()) {
@@ -44,7 +43,7 @@ public class CleanupExecutor {
 
         LocalDateTime cutoff = LocalDateTime.now().minusDays(config.getRetentionDays());
         log.info("[Cleanup] Starting job '{}' — deleting records where {} < {}",
-                config.getJobId(), config.getField(), cutoff);
+            config.getJobId(), config.getField(), cutoff);
 
         try {
             if (config.isSoftDelete()) {
@@ -67,11 +66,17 @@ public class CleanupExecutor {
     private void executeBulkHardDelete(CleanupConfig config, EntityManager em, LocalDateTime cutoff) {
         String jpql = buildHardDeleteJpql(config);
         log.debug("[Cleanup] JPQL: {}", jpql);
-
+        boolean own = false;
+        if (!em.getTransaction().isActive()) {
+            em.getTransaction().begin();
+            own = true;
+        }
         int deleted = em.createQuery(jpql)
-                .setParameter("cutoff", cutoff)
-                .executeUpdate();
-
+            .setParameter("cutoff", cutoff)
+            .executeUpdate();
+        if (own) {
+            em.getTransaction().commit();
+        }
         log.info("[Cleanup] Job '{}' deleted {} rows (bulk).", config.getJobId(), deleted);
     }
 
@@ -79,41 +84,49 @@ public class CleanupExecutor {
     // Hard delete — batched by primary key to avoid long-running locks
     // -------------------------------------------------------------------------
 
-    @SuppressWarnings("unchecked")
     private void executeBatchHardDelete(CleanupConfig config, EntityManager em, LocalDateTime cutoff) {
         String selectJpql = buildBatchSelectJpql(config);
-        String deleteJpql  = "DELETE FROM " + config.getEntityName()
-                + " e WHERE e IN :batch";
+        String deleteJpql = "DELETE FROM " + config.getEntityName()
+            + " e WHERE e IN :batch";
 
         log.debug("[Cleanup] Batch SELECT JPQL: {}", selectJpql);
 
         int totalDeleted = 0;
-        int batchSize    = config.getBatchSize();
-
+        int batchSize = config.getBatchSize();
         while (true) {
             List<?> batch = em.createQuery(selectJpql)
-                    .setParameter("cutoff", cutoff)
-                    .setMaxResults(batchSize)
-                    .getResultList();
+                .setParameter("cutoff", cutoff)
+                .setMaxResults(batchSize)
+                .getResultList();
 
-            if (batch.isEmpty()) break;
-
+            if (batch.isEmpty()) {
+                break;
+            }
+            boolean own = false;
+            if (!em.getTransaction().isActive()) {
+                em.getTransaction().begin();
+                own = true;
+            }
             int count = em.createQuery(deleteJpql)
-                    .setParameter("batch", batch)
-                    .executeUpdate();
+                .setParameter("batch", batch)
+                .executeUpdate();
 
             totalDeleted += count;
             em.flush();
             em.clear();
-
+            if (own) {
+                em.getTransaction().commit();
+            }
             log.debug("[Cleanup] Job '{}' batch deleted {} rows (running total: {}).",
-                    config.getJobId(), count, totalDeleted);
+                config.getJobId(), count, totalDeleted);
 
-            if (batch.size() < batchSize) break;
+            if (batch.size() < batchSize) {
+                break;
+            }
         }
 
         log.info("[Cleanup] Job '{}' deleted {} rows (batched, size={}).",
-                config.getJobId(), totalDeleted, batchSize);
+            config.getJobId(), totalDeleted, batchSize);
     }
 
     // -------------------------------------------------------------------------
@@ -126,7 +139,7 @@ public class CleanupExecutor {
         log.debug("[Cleanup] Soft-delete SELECT JPQL: {}", selectJpql);
 
         Query query = em.createQuery(selectJpql)
-                .setParameter("cutoff", cutoff);
+            .setParameter("cutoff", cutoff);
 
         if (config.getBatchSize() > 0) {
             query.setMaxResults(config.getBatchSize());
@@ -168,7 +181,7 @@ public class CleanupExecutor {
             }
         } catch (NoSuchFieldException | IllegalAccessException e) {
             throw new CleanupExecutionException(
-                    "Entity '" + config.getEntityName() + "' does not implement SoftDeletable "
+                "Entity '" + config.getEntityName() + "' does not implement SoftDeletable "
                     + "and has no 'deleted' field. Cannot soft-delete.", e);
         }
     }
@@ -191,8 +204,8 @@ public class CleanupExecutor {
 
     private String buildHardDeleteJpql(CleanupConfig config) {
         StringBuilder sb = new StringBuilder()
-                .append("DELETE FROM ").append(config.getEntityName()).append(" e")
-                .append(" WHERE e.").append(config.getField()).append(" < :cutoff");
+            .append("DELETE FROM ").append(config.getEntityName()).append(" e")
+            .append(" WHERE e.").append(config.getField()).append(" < :cutoff");
 
         if (config.isSkipSoftDeleted()) {
             appendSkipSoftDeletedClause(sb);
@@ -202,8 +215,8 @@ public class CleanupExecutor {
 
     private String buildBatchSelectJpql(CleanupConfig config) {
         StringBuilder sb = new StringBuilder()
-                .append("SELECT e FROM ").append(config.getEntityName()).append(" e")
-                .append(" WHERE e.").append(config.getField()).append(" < :cutoff");
+            .append("SELECT e FROM ").append(config.getEntityName()).append(" e")
+            .append(" WHERE e.").append(config.getField()).append(" < :cutoff");
 
         if (config.isSkipSoftDeleted()) {
             appendSkipSoftDeletedClause(sb);
@@ -214,8 +227,8 @@ public class CleanupExecutor {
     private String buildSoftDeleteSelectJpql(CleanupConfig config) {
         // For soft delete we only select records that are NOT already soft-deleted
         return "SELECT e FROM " + config.getEntityName() + " e"
-                + " WHERE e." + config.getField() + " < :cutoff"
-                + " AND (e.deleted IS NULL OR e.deleted = false)";
+            + " WHERE e." + config.getField() + " < :cutoff"
+            + " AND (e.deleted IS NULL OR e.deleted = false)";
     }
 
     private void appendSkipSoftDeletedClause(StringBuilder sb) {

@@ -6,12 +6,12 @@
 
   <parent>
     <groupId>io.terapeak</groupId>
-    <artifactId>janitor-quarkus</artifactId>
+    <artifactId>janitor-quarkus-parent</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
   <name>Janitor Quarkus - Runtime</name>
-  <artifactId>janitor-quarkus-runtime</artifactId>
+  <artifactId>janitor-quarkus</artifactId>
 
   <dependencyManagement>
     <dependencies>

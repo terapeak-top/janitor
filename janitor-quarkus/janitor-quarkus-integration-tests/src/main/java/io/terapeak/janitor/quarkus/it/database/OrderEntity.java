@@ -6,12 +6,11 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import java.time.Instant;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "orders")
-@Cleanup(entity = OrderEntity.class, field = "createdAt", retentionDays = 1, cron = "*/10 * * * * ?")
+@Cleanup(field = "createdAt", retentionDays = 1, cron = "*/10 * * * * ?")
 public class OrderEntity {
 
     @Id

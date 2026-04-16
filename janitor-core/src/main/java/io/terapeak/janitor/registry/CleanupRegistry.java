@@ -110,14 +110,14 @@ public class CleanupRegistry {
             Cleanups container = clazz.getAnnotation(Cleanups.class);
             if (container != null) {
                 for (Cleanup cleanup : container.value()) {
-                    configs.add(CleanupConfig.from(cleanup));
+                    configs.add(CleanupConfig.from(clazz,cleanup));
                 }
             }
 
             // Single annotation (not inside container)
             Cleanup single = clazz.getAnnotation(Cleanup.class);
             if (single != null) {
-                configs.add(CleanupConfig.from(single));
+                configs.add(CleanupConfig.from(clazz,single));
             }
 
         } catch (ClassNotFoundException e) {

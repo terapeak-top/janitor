@@ -3,7 +3,7 @@ package io.terapeak.janitor.spring.scheduler;
 import io.terapeak.janitor.config.CleanupConfig;
 import io.terapeak.janitor.executor.CleanupExecutor;
 import io.terapeak.janitor.registry.CleanupRegistry;
-import io.terapeak.janitor.spring.properties.CleanupProperties;
+import io.terapeak.janitor.spring.properties.JanitorProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.TaskScheduler;
@@ -35,14 +35,14 @@ public class CleanupScheduler {
 
     private final CleanupRegistry            registry;
     private final CleanupExecutor            executor;
-    private final CleanupProperties          properties;
+    private final JanitorProperties properties;
     private final TaskScheduler              taskScheduler;
     private final EntityManagerFactory       emf;
     private final PlatformTransactionManager txManager;
 
     public CleanupScheduler(CleanupRegistry registry,
                             CleanupExecutor executor,
-                            CleanupProperties properties,
+                            JanitorProperties properties,
                             TaskScheduler taskScheduler,
                             EntityManagerFactory emf,
                             PlatformTransactionManager txManager) {

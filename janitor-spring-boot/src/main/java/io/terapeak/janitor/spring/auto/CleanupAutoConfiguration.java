@@ -2,7 +2,7 @@ package io.terapeak.janitor.spring.auto;
 
 import io.terapeak.janitor.executor.CleanupExecutor;
 import io.terapeak.janitor.registry.CleanupRegistry;
-import io.terapeak.janitor.spring.properties.CleanupProperties;
+import io.terapeak.janitor.spring.properties.JanitorProperties;
 import io.terapeak.janitor.spring.scheduler.CleanupScheduler;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -26,12 +26,12 @@ import jakarta.persistence.EntityManagerFactory;
  * applications can override any part of the infrastructure.
  *
  * <p>The entire auto-configuration can be disabled with:
- * <pre>{@code cleanup.enabled=false}</pre>
+ * <pre>{@code janitor.enabled=false}</pre>
  */
 @AutoConfiguration
 @EnableScheduling
-@EnableConfigurationProperties(CleanupProperties.class)
-@ConditionalOnProperty(prefix = "cleanup", name = "enabled", havingValue = "true", matchIfMissing = true)
+@EnableConfigurationProperties(JanitorProperties.class)
+@ConditionalOnProperty(prefix = "janitor", name = "enabled", havingValue = "true", matchIfMissing = true)
 public class CleanupAutoConfiguration {
 
     @Bean
@@ -61,7 +61,7 @@ public class CleanupAutoConfiguration {
     @ConditionalOnMissingBean
     public CleanupScheduler cleanupScheduler(CleanupRegistry registry,
                                              CleanupExecutor executor,
-                                             CleanupProperties properties,
+                                             JanitorProperties properties,
                                              TaskScheduler cleanupTaskScheduler,
                                              EntityManagerFactory entityManagerFactory,
                                              PlatformTransactionManager transactionManager) {
