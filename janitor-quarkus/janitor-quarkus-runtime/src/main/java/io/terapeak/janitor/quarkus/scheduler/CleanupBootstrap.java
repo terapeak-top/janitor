@@ -12,20 +12,19 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 
 /**
- * Registers Quarkus {@link Scheduler} jobs programmatically at application startup,
- * one per enabled {@link CleanupConfig}.
+ * Registers Quarkus {@link Scheduler} jobs programmatically at application startup, one per enabled {@link CleanupConfig}.
  *
  * <p>Quarkus's programmatic scheduling API (introduced in Quarkus 3.x) allows us to
- * supply cron expressions resolved at runtime from the annotation index, which means
- * we don't need compile-time {@code @Scheduled} annotations with hardcoded crons.
+ * supply cron expressions resolved at runtime from the annotation index, which means we don't need compile-time {@code @Scheduled}
+ * annotations with hardcoded crons.
  *
  * <p>Each job is identified by its {@link CleanupConfig#getJobId()} and triggers
  * {@link CleanupJobRunner#runById(String)}.
  */
 @ApplicationScoped
-public class CleanupQuartzRegistrar {
+public class CleanupBootstrap {
 
-    private static final Logger log = LoggerFactory.getLogger(CleanupQuartzRegistrar.class);
+    private static final Logger log = LoggerFactory.getLogger(CleanupBootstrap.class);
 
     @Inject
     Scheduler scheduler;
@@ -43,12 +42,12 @@ public class CleanupQuartzRegistrar {
 
         for (CleanupConfig config : configs) {
             String jobId = config.getJobId();
-            String cron  = config.getCron();
+            String cron = config.getCron();
 
             scheduler.newJob(jobId)
-                    .setCron(cron)
-                    .setTask(ex -> runner.runById(jobId))
-                    .schedule();
+                .setCron(cron)
+                .setTask(ex -> runner.runById(jobId))
+                .schedule();
 
             log.info("[Cleanup/Quarkus] Registered job '{}' with cron '{}'.", jobId, cron);
         }

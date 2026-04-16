@@ -1,4 +1,4 @@
-package io.terapeak.cleanup.quarkus.deployment;
+package io.terapeak.janitor.quarkus.deployment;
 
 import io.quarkus.arc.deployment.AdditionalBeanBuildItem;
 import io.quarkus.deployment.annotations.BuildStep;
@@ -8,7 +8,7 @@ import io.quarkus.deployment.builditem.nativeimage.ReflectiveClassBuildItem;
 import io.terapeak.janitor.annotation.Cleanup;
 import io.terapeak.janitor.annotation.Cleanups;
 import io.terapeak.janitor.quarkus.scheduler.CleanupJobRunner;
-import io.terapeak.janitor.quarkus.scheduler.CleanupQuartzRegistrar;
+import io.terapeak.janitor.quarkus.scheduler.CleanupBootstrap;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -57,7 +57,7 @@ public class CleanupProcessor {
                 .setUnremovable()
                 .addBeanClasses(
                         CleanupJobRunner.class,
-                        CleanupQuartzRegistrar.class)
+                        CleanupBootstrap.class)
                 .build();
     }
 

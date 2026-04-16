@@ -7,15 +7,18 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import java.time.Instant;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "orders")
-@Cleanup(entity = OrderEntity.class, field = "createdAt", retentionDays = 1)
+@Cleanup(entity = OrderEntity.class, field = "createdAt", retentionDays = 1, cron = "*/10 * * * * ?")
 public class OrderEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long id;
 
-    public Instant createdAt;
+    public LocalDateTime createdAt;
+
+    public Boolean deleted;
 }

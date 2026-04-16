@@ -22,7 +22,7 @@ import java.util.List;
  * we use the programmatic {@link io.quarkus.scheduler.Scheduler} API to register
  * jobs dynamically at startup — one per discovered {@link CleanupConfig}.
  *
- * <p>See {@link CleanupQuartzRegistrar} for the programmatic registration logic.
+ * <p>See {@link CleanupBootstrap} for the programmatic registration logic.
  */
 @ApplicationScoped
 public class CleanupJobRunner {
@@ -45,7 +45,7 @@ public class CleanupJobRunner {
 
     /**
      * Returns all discovered and enabled configurations — used by
-     * {@link CleanupQuartzRegistrar} to register scheduled jobs.
+     * {@link CleanupBootstrap} to register scheduled jobs.
      */
     public List<CleanupConfig> getEnabledConfigs() {
         return configs.stream()
@@ -55,7 +55,7 @@ public class CleanupJobRunner {
 
     /**
      * Execute a single cleanup job by its job-id.
-     * Called from the Quarkus Scheduler trigger registered in {@link CleanupQuartzRegistrar}.
+     * Called from the Quarkus Scheduler trigger registered in {@link CleanupBootstrap}.
      *
      * @param jobId the value of {@link CleanupConfig#getJobId()}
      */

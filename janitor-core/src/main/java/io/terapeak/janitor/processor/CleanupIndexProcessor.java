@@ -35,8 +35,8 @@ import java.util.Set;
  */
 @AutoService(Processor.class)
 @SupportedAnnotationTypes({
-        "io.terapeak.cleanup.annotation.Cleanup",
-        "io.terapeak.cleanup.annotation.Cleanups"
+        "io.terapeak.janitor.annotation.Cleanup",
+        "io.terapeak.janitor.annotation.Cleanups"
 })
 @SupportedSourceVersion(SourceVersion.RELEASE_11)
 public class CleanupIndexProcessor extends AbstractProcessor {

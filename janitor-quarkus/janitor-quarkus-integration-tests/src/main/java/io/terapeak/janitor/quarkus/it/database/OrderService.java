@@ -4,6 +4,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
 @ApplicationScoped
@@ -18,9 +19,8 @@ public class OrderService {
     @Transactional
     public OrderEntity createOrder() {
         OrderEntity order = new OrderEntity();
-        order.createdAt = Instant.now().minus(5, ChronoUnit.DAYS);
+        order.createdAt = LocalDateTime.now().minusDays(5);
         em.persist(order);
-        em.flush();
         return order;
     }
 }

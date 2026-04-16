@@ -66,10 +66,10 @@ public final class CleanupConfig {
 
     /**
      * Human-readable job identifier, used as a scheduler job key.
-     * Format: {@code entity_cleanup_<EntityName>_<field>}
+     * Format: {@code janitor_cleanup_<EntityName>_<field>}
      */
     public String getJobId() {
-        return "entity_cleanup_" + entityName + "_" + field;
+        return "janitor_cleanup_" + entityName + "_" + field;
     }
 
     @Override

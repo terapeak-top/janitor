@@ -9,14 +9,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @QuarkusMain
-public class DatabaseCleanupQuarkusResource {
+public class Janitor {
 
     public static void main(String... args) {
         Quarkus.run(TestApplication.class, args);
     }
 
     public static class TestApplication implements QuarkusApplication {
-    private static final Logger log = LoggerFactory.getLogger(DatabaseCleanupQuarkusResource.class);
+    private static final Logger log = LoggerFactory.getLogger(TestApplication.class);
 
         @Inject
         OrderService orderService;
