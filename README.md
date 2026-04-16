@@ -8,13 +8,12 @@ old rows from your entity table automatically.
 
 ## Modules
 
-| Artifact                      | Purpose |
-|-------------------------------|---|
-| `janitor-core`                | Annotation, config model, executor, registry, annotation processor |
-| `janitor-spring-boot-starter` | Spring Boot 3.x auto-configuration |
-| `janitor-quarkus-runtime`     | Quarkus CDI beans and scheduler integration |
-| `janitor-quarkus-deployment`  | Quarkus build-time processor (Jandex, reflection registration) |
-| `janitor-kumuluzee`           | KumuluzEE CDI + kumuluzee-cron integration |
+| Artifact                    | Purpose |
+|-----------------------------|---|
+| `janitor-core`              | Annotation, config model, executor, registry, annotation processor |
+| `janitor-spring-boot` | Spring Boot 3.x auto-configuration |
+| `janitor-quarkus`     | Quarkus CDI beans and scheduler integration |
+| `janitor-kumuluzee`         | KumuluzEE CDI + kumuluzee-cron integration |
 
 ---
 
@@ -26,7 +25,7 @@ old rows from your entity table automatically.
 ```xml
 <dependency>
     <groupId>io.terapeak</groupId>
-    <artifactId>janitor-spring-boot-starter</artifactId>
+    <artifactId>janitor-spring-boot</artifactId>
     <version>1.0.0</version>
 </dependency>
 ```
@@ -35,7 +34,7 @@ old rows from your entity table automatically.
 ```xml
 <dependency>
     <groupId>io.terapeak</groupId>
-    <artifactId>janitor-quarkus-runtime</artifactId>
+    <artifactId>janitor-quarkus</artifactId>
     <version>1.0.0</version>
 </dependency>
 ```
@@ -52,10 +51,8 @@ old rows from your entity table automatically.
 
 ---
 
-### 2. Annotate a configuration class
+### 2. Annotate any entity class
 
-Create any class (a dedicated config class, an existing service, or even a `package-info.java`)
-and add one or more `@Cleanup` annotations:
 
 ```java
 package com.example.config;
@@ -75,7 +72,8 @@ import io.terapeak.cleanup.annotation.Cleanup;
     retentionDays = 30,
     softDelete    = true               // sets deleted=true instead of hard DELETE
 )
-public class CleanupConfiguration {}
+@Entity(table="customer_profile")
+public class Customer {}
 ```
 
 The annotation processor generates `META-INF/janitor/cleanups.index` at compile time.
