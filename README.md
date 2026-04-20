@@ -76,7 +76,7 @@ The scheduler for this entity will run a cleanup job every night at 5 AM and wil
 > What will be executed: `DELETE FROM Customer c WHERE c.createdAt < '2026-01-20T14:30:05.080028410' and deleted = false`
 
 > [!WARNING]  
-> Using the skipSoftDeleted parameter assumes the target entity contains a boolean field named `deleted`
+> Using the `skipSoftDeleted` parameter assumes the target entity contains a boolean field named `deleted`
 
 #### Using soft cleanup
 ```java
