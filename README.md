@@ -64,6 +64,8 @@ The scheduler for this entity will run a cleanup job every night at 2 AM and wil
 > ![TIP] 
 > What will be executed: `DELETE FROM Customer c WHERE c.createdAt < '2026-01-20T14:30:05.080028410'` 
 
+> [!WARNING]  
+> Critical content demanding immediate user attention due to potential risks.
 
 #### Advanced parameters
 
