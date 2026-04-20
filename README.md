@@ -53,31 +53,75 @@ old rows from your entity table automatically.
 
 ### 2. Annotate any entity class
 
+#### Simplest form all defaults
 
 ```java
-package com.example.config;
+@Cleanup(field = "createdAt", retentionDays = 90)
+@Entity(table="customer_profile")
+public class Customer {}
+```
+The scheduler for this entity will run a cleanup job every night at 2 AM and will clean all Customers that are older than 90 days, considering createdAt contains the creation `LocalDateTime`
+> ![TIP] 
+> What will be executed: `DELETE FROM Customer c WHERE c.createdAt < '2026-01-20T14:30:05.080028410'` 
 
-import io.terapeak.cleanup.annotation.Cleanup;
 
-@Cleanup(
-    field         = "createdAt",       // java.time.LocalDateTime field on the entity
-    retentionDays = 90,                // delete rows older than 90 days
-    cron          = "0 0 2 * * ?",     // 2 AM every day (Quartz format)
-    batchSize     = 500,               // delete 500 rows per transaction batch
-    softDelete    = false,
-    skipSoftDeleted = true
-)
-@Cleanup(
-    field         = "lastActiveAt",
-    retentionDays = 30,
-    softDelete    = true               // sets deleted=true instead of hard DELETE
-)
+#### Advanced parameters
+
+```java
+@Cleanup(field = "createdAt", retentionDays = 20, cron = "0 0 5 * * ?", batchSize = 500, skipSoftDeleted = true)
+@Entity(table="customer_profile")
+public class Customer {}
+```
+The scheduler for this entity will run a cleanup job every night at 5 AM and will clean all Customers that are older than 20 days, considering createdAt contains the creation `LocalDateTime` and skipping all already soft deleted rows
+> ![TIP] 
+> What will be executed: `DELETE FROM Customer c WHERE c.createdAt < '2026-01-20T14:30:05.080028410' and deleted = false`
+
+> ![!WARNING]
+> Using the skipSoftDeleted parameter assumes the target entity contains a boolean field named `deleted`
+
+#### Using soft cleanup
+```java
+@Cleanup(field = "lastActiveAt", retentionDays = 10, softDelete = true)
+@Entity(table="customer_profile")
+public class Customer {}
+```
+The scheduler for this entity will run a cleanup job every night at 2 AM and will soft delete all Customers that have not been active more than 10 days, considering `lastActiveAt` contains the last login time. Using this option does not actually delete the rows, instead it executes an update, setting `deleted = true` on all target entities
+
+> ![TIP]
+> What will be executed: `UPDATE Customer c SET c.deleted = true WHERE c.lastActiveAt < '2026-01-20T14:30:05.080028410' and deleted = false`
+
+> ![!WARNING]
+> Using the softDelete parameter assumes the target entity contains a boolean field named `deleted`
+
+#### Multiple usage
+The same annotation can be used multiple times on the same entity as long as a different field and soft/hard delete are distinguishing them from one another. For example this is a legitimate usage:
+
+```java
+@Cleanup(field = "createdAt", retentionDays = 90, skipSoftDeleted = true)
+@Cleanup(field = "lastActiveAt", retentionDays = 10, softDelete = true)
 @Entity(table="customer_profile")
 public class Customer {}
 ```
 
-The annotation processor generates `META-INF/janitor/cleanups.index` at compile time.
-No runtime classpath scanning is needed.
+### Class scanning
+
+This library does not classes at runtime. In order for the entity classes to be detected the host project need to integrate the compile time processor in its build setup. For example for Maven here is an example that needs to be added to the build:
+
+```xml
+<plugin>
+  <artifactId>maven-compiler-plugin</artifactId>
+  <configuration>
+    <annotationProcessorPaths>
+      <path>
+        <groupId>top.terapeak</groupId>
+        <artifactId>janitor-core</artifactId>
+        <version>1.0.0</version>
+      </path>
+    </annotationProcessorPaths>
+  </configuration>
+</plugin>
+```
+The annotation processor then generates `META-INF/janitor/cleanups.index` at compile time in the host project. This file is then used at runtime to schedule all the executors for the annotated classes.
 
 ---
 
