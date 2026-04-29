@@ -61,9 +61,8 @@ old rows from your entity table automatically.
 public class Customer {}
 ```
 The scheduler for this entity will run a cleanup job every night at 2 AM and will clean all Customers that are older than 90 days, considering createdAt contains the creation `LocalDateTime`
-> ![TIP] 
+> [!TIP]
 > What will be executed: `DELETE FROM Customer c WHERE c.createdAt < '2026-01-20T14:30:05.080028410'` 
-
 
 #### Advanced parameters
 
@@ -73,11 +72,11 @@ The scheduler for this entity will run a cleanup job every night at 2 AM and wil
 public class Customer {}
 ```
 The scheduler for this entity will run a cleanup job every night at 5 AM and will clean all Customers that are older than 20 days, considering createdAt contains the creation `LocalDateTime` and skipping all already soft deleted rows
-> ![TIP] 
+> [!TIP]
 > What will be executed: `DELETE FROM Customer c WHERE c.createdAt < '2026-01-20T14:30:05.080028410' and deleted = false`
 
-> ![!WARNING]
-> Using the skipSoftDeleted parameter assumes the target entity contains a boolean field named `deleted`
+> [!WARNING]  
+> Using the `skipSoftDeleted` parameter assumes the target entity contains a boolean field named `deleted`
 
 #### Using soft cleanup
 ```java
@@ -87,11 +86,11 @@ public class Customer {}
 ```
 The scheduler for this entity will run a cleanup job every night at 2 AM and will soft delete all Customers that have not been active more than 10 days, considering `lastActiveAt` contains the last login time. Using this option does not actually delete the rows, instead it executes an update, setting `deleted = true` on all target entities
 
-> ![TIP]
+> [!TIP]
 > What will be executed: `UPDATE Customer c SET c.deleted = true WHERE c.lastActiveAt < '2026-01-20T14:30:05.080028410' and deleted = false`
 
-> ![!WARNING]
-> Using the softDelete parameter assumes the target entity contains a boolean field named `deleted`
+> [!WARNING]  
+> Using the `softDelete` parameter assumes the target entity contains a boolean field named `deleted`
 
 #### Multiple usage
 The same annotation can be used multiple times on the same entity as long as a different field and soft/hard delete are distinguishing them from one another. For example this is a legitimate usage:
