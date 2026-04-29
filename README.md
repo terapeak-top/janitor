@@ -104,7 +104,7 @@ public class Customer {}
 
 ### Class scanning
 
-This library does not classes at runtime. In order for the entity classes to be detected the host project need to integrate the compile time processor in its build setup. For example for Maven here is an example that needs to be added to the build:
+This library does not scan classes at runtime. In order for the entity classes to be detected the host project need to integrate the compile time processor in its build setup. For example for Maven here is an example that needs to be added to the build:
 
 ```xml
 <plugin>
