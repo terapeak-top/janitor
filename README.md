@@ -24,7 +24,7 @@ old rows from your entity table automatically.
 **Spring Boot 3.x**
 ```xml
 <dependency>
-    <groupId>io.terapeak</groupId>
+    <groupId>top.terapeak</groupId>
     <artifactId>janitor-spring-boot</artifactId>
     <version>1.0.0</version>
 </dependency>
@@ -33,7 +33,7 @@ old rows from your entity table automatically.
 **Quarkus**
 ```xml
 <dependency>
-    <groupId>io.terapeak</groupId>
+    <groupId>top.terapeak</groupId>
     <artifactId>janitor-quarkus</artifactId>
     <version>1.0.0</version>
 </dependency>
@@ -43,7 +43,7 @@ old rows from your entity table automatically.
 **KumuluzEE**
 ```xml
 <dependency>
-    <groupId>io.terapeak</groupId>
+    <groupId>top.terapeak</groupId>
     <artifactId>janitor-kumuluzee</artifactId>
     <version>1.0.0</version>
 </dependency>
@@ -145,7 +145,7 @@ The executor supports two soft-delete mechanisms:
 
 **Option A — implement `SoftDeletable`:**
 ```java
-import io.terapeak.cleanup.spi.SoftDeletable;
+import top.terapeak.cleanup.spi.SoftDeletable;
 
 @Entity
 public class UserSession implements SoftDeletable {

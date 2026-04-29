@@ -5,7 +5,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>io.terapeak</groupId>
+    <groupId>top.terapeak</groupId>
     <artifactId>janitor-quarkus-parent</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <relativePath>../pom.xml</relativePath>
@@ -28,7 +28,7 @@
   <dependencies>
     <!-- The deployment module always depends on its runtime counterpart -->
     <dependency>
-      <groupId>io.terapeak</groupId>
+      <groupId>top.terapeak</groupId>
       <artifactId>janitor-quarkus</artifactId>
       <version>${project.version}</version>
     </dependency>

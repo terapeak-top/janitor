@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>io.terapeak</groupId>
+    <groupId>top.terapeak</groupId>
     <artifactId>janitor-quarkus-parent</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <relativePath>../pom.xml</relativePath>
@@ -18,7 +18,7 @@
 
   <dependencies>
     <dependency>
-      <groupId>io.terapeak</groupId>
+      <groupId>top.terapeak</groupId>
       <artifactId>janitor-quarkus</artifactId>
       <version>${project.version}</version>
     </dependency>
@@ -38,7 +38,7 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>io.terapeak</groupId>
+      <groupId>top.terapeak</groupId>
       <artifactId>janitor-core</artifactId>
       <version>1.0.0-SNAPSHOT</version>
       <scope>compile</scope>
@@ -81,7 +81,7 @@
         <configuration>
           <annotationProcessorPaths>
             <path>
-              <groupId>io.terapeak</groupId>
+              <groupId>top.terapeak</groupId>
               <artifactId>janitor-core</artifactId>
               <version>${project.version}</version>
             </path>
