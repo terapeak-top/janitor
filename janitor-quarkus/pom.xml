@@ -4,9 +4,32 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>top.terapeak</groupId>
   <artifactId>janitor-quarkus-parent</artifactId>
-  <version>1.0.0-SNAPSHOT</version>
+  <version>1.0.0</version>
   <packaging>pom</packaging>
   <name>Janitor Quarkus</name>
+  <description>Janitor quarkus projects library</description>
+  <url>https://github.com/terapeak-top/janitor</url>
+
+  <licenses>
+    <license>
+      <name>The Apache License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+    </license>
+  </licenses>
+
+  <developers>
+    <developer>
+      <name>Ilija Trajkoski</name>
+      <email>ilija.trajkoski@gmail.com</email>
+      <organization>Terapeak Ilija Trajkoski s.p.</organization>
+      <organizationUrl>http://www.terapeak.top</organizationUrl>
+    </developer>
+  </developers>
+  <scm>
+    <connection>scm:git:git://github.com/terapeak-top/janitor.git</connection>
+    <developerConnection>scm:git:ssh://github.com/terapeak-top/janitor.git</developerConnection>
+    <url>https://github.com/terapeak-top/janitor</url>
+  </scm>
 
   <modules>
     <module>janitor-quarkus-runtime</module>

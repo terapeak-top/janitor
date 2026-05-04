@@ -22,7 +22,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * KumuluzEE application-scoped bean that discovers all {@link CleanupConfig} instances and registers a {@link CleanupCronJob} for each one
- * using the {@code kumuluzee-cron} extension's {@link com.kumuluz.ee.cron.utils.CronUtils}.
+ * using the {@code kumuluzee-cron} extensions
  *
  * <p>Initialization is triggered when the {@code ApplicationScoped} context
  * starts, via {@code @Observes @Initialized(ApplicationScoped.class)}.
