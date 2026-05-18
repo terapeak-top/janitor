@@ -29,9 +29,9 @@ import org.slf4j.LoggerFactory;
  * {@link CleanupJobRunner#runById(String)}.
  */
 @ApplicationScoped
-public class CleanupBootstrap {
+public class CleanupScheduler {
 
-    private static final Logger log = LoggerFactory.getLogger(CleanupBootstrap.class);
+    private static final Logger log = LoggerFactory.getLogger(CleanupScheduler.class);
 
     @Inject
     ScheduledExecutorService executor;

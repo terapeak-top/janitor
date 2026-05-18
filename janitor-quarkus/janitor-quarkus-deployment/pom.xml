@@ -7,7 +7,7 @@
   <parent>
     <groupId>top.terapeak</groupId>
     <artifactId>janitor-quarkus-parent</artifactId>
-    <version>1.0.0</version>
+    <version>1.1.0</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
   <name>Janitor Quarkus - Deployment</name>
@@ -30,7 +30,7 @@
     <dependency>
       <groupId>top.terapeak</groupId>
       <artifactId>janitor-quarkus</artifactId>
-      <version>${project.version}</version>
+      <version>1.1.0</version>
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>

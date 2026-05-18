@@ -9,7 +9,7 @@ import top.terapeak.janitor.annotation.Cleanup;
 import top.terapeak.janitor.annotation.Cleanups;
 import top.terapeak.janitor.config.CleanupConfig;
 import top.terapeak.janitor.executor.CleanupExecutor;
-import top.terapeak.janitor.quarkus.scheduler.CleanupBootstrap;
+import top.terapeak.janitor.quarkus.scheduler.CleanupScheduler;
 import top.terapeak.janitor.quarkus.scheduler.CleanupJobRunner;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -60,7 +60,7 @@ public class CleanupProcessor {
             .setUnremovable()
             .addBeanClasses(
                 CleanupJobRunner.class,
-                CleanupBootstrap.class)
+                CleanupScheduler.class)
             .build();
     }
 

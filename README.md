@@ -17,16 +17,21 @@ old rows from your entity table automatically.
 
 ---
 
+## Demos
+- [Spring boot demo](https://github.com/terapeak-top/janitor-spring-boot-demo)
+- [Quarkus demo](https://github.com/terapeak-top/janitor-quarkus-demo)
+- [KumuluzEE demo](https://github.com/terapeak-top/janitor-kumuluzee-demo)
+
 ## Quick start
 
-### 1. Add the dependency
+### Add the dependency
 
 **Spring Boot 3.x**
 ```xml
 <dependency>
     <groupId>top.terapeak</groupId>
     <artifactId>janitor-spring-boot</artifactId>
-    <version>1.0.0</version>
+    <version>1.1.0</version>
 </dependency>
 ```
 
@@ -35,7 +40,7 @@ old rows from your entity table automatically.
 <dependency>
     <groupId>top.terapeak</groupId>
     <artifactId>janitor-quarkus</artifactId>
-    <version>1.0.0</version>
+    <version>1.1.0</version>
 </dependency>
 ```
 > The deployment artifact is picked up automatically via `quarkus-extension.properties`.
@@ -45,13 +50,13 @@ old rows from your entity table automatically.
 <dependency>
     <groupId>top.terapeak</groupId>
     <artifactId>janitor-kumuluzee</artifactId>
-    <version>1.0.0</version>
+    <version>1.1.0</version>
 </dependency>
 ```
 
 ---
 
-### 2. Annotate any entity class
+### Annotate any entity class
 
 #### Simplest form all defaults
 

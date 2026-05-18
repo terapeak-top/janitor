@@ -18,40 +18,37 @@ import jakarta.persistence.EntityManager;
 import java.util.List;
 
 /**
- * Registers one dynamic cron task per discovered {@link CleanupConfig} using
- * Spring's {@link TaskScheduler}.
+ * Registers one dynamic cron task per discovered {@link CleanupConfig} using Spring's {@link TaskScheduler}.
  *
  * <p>By using {@code TaskScheduler} and {@link CronTrigger} rather than
- * {@code @Scheduled}, we support fully dynamic cron expressions resolved at
- * runtime from annotation values — no hard-coding required.
+ * {@code @Scheduled}, we support fully dynamic cron expressions resolved at runtime from annotation values — no hard-coding required.
  *
  * <p>Each job runs inside a dedicated {@link TransactionTemplate} so that batches
- * are committed independently and a failure in one batch does not roll back
- * previously committed work.
+ * are committed independently and a failure in one batch does not roll back previously committed work.
  */
 public class CleanupScheduler {
 
     private static final Logger log = LoggerFactory.getLogger(CleanupScheduler.class);
 
-    private final CleanupRegistry            registry;
-    private final CleanupExecutor            executor;
+    private final CleanupRegistry registry;
+    private final CleanupExecutor executor;
     private final JanitorProperties properties;
-    private final TaskScheduler              taskScheduler;
-    private final EntityManagerFactory       emf;
+    private final TaskScheduler taskScheduler;
+    private final EntityManagerFactory emf;
     private final PlatformTransactionManager txManager;
 
     public CleanupScheduler(CleanupRegistry registry,
-                            CleanupExecutor executor,
-                            JanitorProperties properties,
-                            TaskScheduler taskScheduler,
-                            EntityManagerFactory emf,
-                            PlatformTransactionManager txManager) {
-        this.registry      = registry;
-        this.executor      = executor;
-        this.properties    = properties;
+        CleanupExecutor executor,
+        JanitorProperties properties,
+        TaskScheduler taskScheduler,
+        EntityManagerFactory emf,
+        PlatformTransactionManager txManager) {
+        this.registry = registry;
+        this.executor = executor;
+        this.properties = properties;
         this.taskScheduler = taskScheduler;
-        this.emf           = emf;
-        this.txManager     = txManager;
+        this.emf = emf;
+        this.txManager = txManager;
     }
 
     @PostConstruct
@@ -74,12 +71,12 @@ public class CleanupScheduler {
             }
 
             CleanupConfig resolved = applyGlobalDefaults(config);
-            CronTrigger   trigger  = new CronTrigger(resolved.getCron());
+            CronTrigger trigger = new CronTrigger(resolved.getCron());
 
             taskScheduler.schedule(() -> runJob(resolved), trigger);
 
             log.info("[Cleanup] Registered job '{}' with cron '{}'.",
-                    resolved.getJobId(), resolved.getCron());
+                resolved.getJobId(), resolved.getCron());
         }
     }
 
@@ -92,10 +89,20 @@ public class CleanupScheduler {
         tx.execute(status -> {
             EntityManager em = emf.createEntityManager();
             try {
+                boolean own = false;
+                if (!em.getTransaction().isActive()) {
+                    em.getTransaction().begin();
+                    own = true;
+                }
                 executor.execute(config, em);
+                if (own) {
+                    em.getTransaction().commit();
+                }
                 return null;
             } finally {
-                if (em.isOpen()) em.close();
+                if (em.isOpen()) {
+                    em.close();
+                }
             }
         });
     }
@@ -103,16 +110,16 @@ public class CleanupScheduler {
     private CleanupConfig applyGlobalDefaults(CleanupConfig config) {
         if (properties.getDefaultBatchSize() > 0 && config.getBatchSize() == 0) {
             return CleanupConfig.builder()
-                    .entity(config.getEntity())
-                    .entityName(config.getEntityName())
-                    .field(config.getField())
-                    .retentionDays(config.getRetentionDays())
-                    .cron(config.getCron())
-                    .enabled(config.isEnabled())
-                    .batchSize(properties.getDefaultBatchSize())
-                    .softDelete(config.isSoftDelete())
-                    .skipSoftDeleted(config.isSkipSoftDeleted())
-                    .build();
+                .entity(config.getEntity())
+                .entityName(config.getEntityName())
+                .field(config.getField())
+                .retentionDays(config.getRetentionDays())
+                .cron(config.getCron())
+                .enabled(config.isEnabled())
+                .batchSize(properties.getDefaultBatchSize())
+                .softDelete(config.isSoftDelete())
+                .skipSoftDeleted(config.isSkipSoftDeleted())
+                .build();
         }
         return config;
     }

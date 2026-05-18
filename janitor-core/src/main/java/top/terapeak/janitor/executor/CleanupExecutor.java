@@ -61,17 +61,9 @@ public class CleanupExecutor {
     private void executeBulkHardDelete(CleanupConfig config, EntityManager em, LocalDateTime cutoff) {
         String jpql = buildHardDeleteJpql(config);
         log.debug("[Cleanup] JPQL: {}", jpql);
-        boolean own = false;
-        if (!em.getTransaction().isActive()) {
-            em.getTransaction().begin();
-            own = true;
-        }
         int deleted = em.createQuery(jpql)
             .setParameter("cutoff", cutoff)
             .executeUpdate();
-        if (own) {
-            em.getTransaction().commit();
-        }
         log.info("[Cleanup] Job '{}' deleted {} rows (bulk).", config.getJobId(), deleted);
     }
 
@@ -94,11 +86,6 @@ public class CleanupExecutor {
             if (batch.isEmpty()) {
                 break;
             }
-            boolean own = false;
-            if (!em.getTransaction().isActive()) {
-                em.getTransaction().begin();
-                own = true;
-            }
             int count = em.createQuery(deleteJpql)
                 .setParameter("batch", batch)
                 .executeUpdate();
@@ -106,9 +93,6 @@ public class CleanupExecutor {
             totalDeleted += count;
             em.flush();
             em.clear();
-            if (own) {
-                em.getTransaction().commit();
-            }
             log.debug("[Cleanup] Job '{}' batch deleted {} rows (running total: {}).",
                 config.getJobId(), count, totalDeleted);
 
@@ -121,8 +105,6 @@ public class CleanupExecutor {
             config.getJobId(), totalDeleted, batchSize);
     }
 
-
-    @SuppressWarnings("unchecked")
     private void executeSoftDelete(CleanupConfig config, EntityManager em, LocalDateTime cutoff) {
         String selectJpql = buildSoftDeleteSelectJpql(config);
         log.debug("[Cleanup] Soft-delete SELECT JPQL: {}", selectJpql);
