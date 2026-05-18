@@ -20,7 +20,7 @@
     <dependency>
       <groupId>top.terapeak</groupId>
       <artifactId>janitor-quarkus</artifactId>
-      <version>1.1.0</version>
+      <version>${project.version}</version>
     </dependency>
     <!-- JPA -->
     <dependency>
@@ -83,7 +83,7 @@
             <path>
               <groupId>top.terapeak</groupId>
               <artifactId>janitor-core</artifactId>
-              <version>1.1.0</version>
+              <version>${project.version}</version>
             </path>
           </annotationProcessorPaths>
         </configuration>
