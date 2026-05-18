@@ -119,7 +119,7 @@ This library does not scan classes at runtime. In order for the entity classes t
       <path>
         <groupId>top.terapeak</groupId>
         <artifactId>janitor-core</artifactId>
-        <version>1.0.0</version>
+        <version>1.1.0</version>
       </path>
     </annotationProcessorPaths>
   </configuration>
